@@ -2,7 +2,7 @@ import * as Joi from '@hapi/joi';
 
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabseModule } from './db/db.module';
+import { DatabaseModule } from './db/db.module';
 
 @Module({
   imports: [
@@ -13,10 +13,11 @@ import { DatabseModule } from './db/db.module';
         POSTGRES_USER: Joi.string().required(),
         POSTGRES_PASSWORD: Joi.string().required(),
         POSTGRES_DB: Joi.string().required(),
+        POSTGRES_CERT: Joi.string().required(),
         PORT: Joi.number().required(),
       }),
     }),
-    DatabseModule,
+    DatabaseModule,
   ],
   controllers: [],
   providers: [],
