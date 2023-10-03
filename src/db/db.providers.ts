@@ -1,10 +1,11 @@
 import { ConfigService } from '@nestjs/config';
 import { readFileSync } from 'fs';
+import { DATA_SOURCE } from 'src/constants';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
   {
-    provide: 'DATA_SOURCE',
+    provide: DATA_SOURCE,
     inject: [ConfigService],
     useFactory: async (configService: ConfigService) => {
       const dataSource = new DataSource({
@@ -14,12 +15,13 @@ export const databaseProviders = [
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         ssl: {
           rejectUnauthorized: false,
           cert: readFileSync(configService.get('POSTGRES_CERT')).toString(),
         },
         synchronize: true,
-        logging: ['query', 'error'],
+        logging: ['error'],
       });
 
       return dataSource.initialize();
